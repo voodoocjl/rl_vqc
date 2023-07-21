@@ -97,7 +97,8 @@ def one_episode(episode_no, env, agent, episodes):
         gate = agent.translate[action]
         print("\033[1;31;40mEpisode: {}\033[0m".format(episode_no), "\033[1;33;40mLayer: {}\033[0m".format(itr), 
               "\033[1;35;40mAction: {}\033[0m".format(gate), "\033[1;33;40mThreshold: {}\033[0m".format(env.curriculum.min_en + env.curriculum.current_threshold),
-              "\033[1;37;40mBest:\033[0m", format(env.curriculum.lowest_energy, '.4f'), end="\n")
+              "\033[1;37;40mBest:\033[0m", format(env.curriculum.lowest_energy, '.4f'), 
+              "\033[1;35;40mMemory: {}\033[0m".format(len(agent.memory.memory)), end="\n")
 
         next_state, reward, done = env.step(gate)
         assert all(next_state == env.state.view(-1).to(device)), "Problem with internal state"
@@ -153,7 +154,7 @@ def train(agent, env, episodes, seed, output_path,threshold):
 
 def get_args(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--seed', type=int, default=0, help='Seed for reproduction')
+    parser.add_argument('--seed', type=int, default=1, help='Seed for reproduction')
     parser.add_argument('--config', type=str, default='mosi', help='Name of configuration file')
     parser.add_argument('--experiment_name', type=str, default='multimodal/', help='Name of experiment')
     parser.add_argument('--gpu_id', type=int, default=0, help='Set specific GPU to run experiment [0, 1, ...]')

@@ -44,7 +44,7 @@ class QuantumLayer(torch.nn.Module):
             for i in range(n_layers):        
                 angle = q_weight_features[i]
                 if current_design[0][i].item() != n_qubits:
-                    qml.IsingXX(angle,
+                    qml.IsingZZ(angle,
                                 wires=[
                                     int(current_design[0][i].item()),
                                     int(current_design[1][i].item())
@@ -57,7 +57,8 @@ class QuantumLayer(torch.nn.Module):
                     elif axis == 'Y' or axis == 'y' or axis == 2:
                         qml.RY(angle, wires=int(current_design[2][i].item()))
                     elif axis == 'Z' or axis == 'z' or axis == 3:
-                        qml.RZ(angle, wires=int(current_design[2][i].item()))
+                        j = int(current_design[2][i].item())
+                        qml.Rot(*q_input_features[j], wires=j)
                     else:
                         print("Wrong gate")            
             return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)]
@@ -72,7 +73,7 @@ class QNet(torch.nn.Module):
         super(QNet, self).__init__()
         self.args = arguments
         self.design = design
-        self.ClassicalLayer_a = nn.RNN(self.args["a_insize"], self.args["a_hidsize"])
+        self.ClassicalLayer_a = nn.LSTM(self.args["a_insize"], self.args["a_hidsize"])
         self.ClassicalLayer_v = nn.RNN(self.args["v_insize"], self.args["v_hidsize"])        
         self.ClassicalLayer_t = nn.RNN(self.args["t_insize"], self.args["t_hidsize"])        
         self.QuantumLayer = QuantumLayer(self.args, self.design)
