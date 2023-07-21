@@ -1,2 +1,2 @@
 # rl_vqc
-reinfocement learning for quantum multimodel network architecture search
+reinfocement learning for the quantum multimodel network design search
