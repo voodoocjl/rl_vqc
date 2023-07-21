@@ -4,7 +4,7 @@ import numpy as np
 # from chemical_hamiltonians import qiskit_LiH_chem, convert_from_qiskit, qiskit_H2_chem, paulis2matrices
 import json
 from itertools import product
-from qulacs import Observable
+
 
 
 
