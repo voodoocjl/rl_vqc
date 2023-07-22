@@ -3,4 +3,4 @@ __pycache__/
 data/mosi
 
 results/
-agents/__pycache__/DeepQ.cpython-39.pyc
+agents/__pycache__/*.py

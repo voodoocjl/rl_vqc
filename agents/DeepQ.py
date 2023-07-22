@@ -82,7 +82,9 @@ class DQN(object):
         epsilon = False
         if torch.rand(1).item() <= self.epsilon:
             epsilon = True
-            return (torch.randint(self.action_size, (1,)).item(), epsilon)
+            # return (torch.randint(self.action_size, (1,)).item(), epsilon)
+            return (np.random.RandomState().randint(0, self.action_size), epsilon)
+
         act_values = self.policy_net.forward(state)
        
         return torch.argmax(act_values[0]).item(), epsilon
