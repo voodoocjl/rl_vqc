@@ -7,7 +7,6 @@ from itertools import product
 
 
 
-
 # def gen_hamiltonian(num_qubits, conf, taper=True, exact_en=False):
 #     if conf["ham_type"] == 'LiH':        
 #         paulis, paulis_qulacs, weights, energies, shift = qiskit_LiH_chem(conf["geometry"], conf["taper"], exact_en, conf["mapping"])

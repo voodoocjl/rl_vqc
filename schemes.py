@@ -66,11 +66,12 @@ def evaluate(model, data_loader, device):
 
 
 def Scheme(config):
-    # # random.seed(args.seed)
-    # torch.manual_seed(42)
-    # torch.cuda.manual_seed(42)
-    # np.random.seed(42)
+    # random.seed(args.seed)
+    torch.manual_seed(42)
+    torch.cuda.manual_seed(42)
+    np.random.seed(42)
 
+    print(torch.rand(1))
     args = config.model
     design = config.state
     device = config.device

@@ -14,5 +14,4 @@ class Arguments:
         self.qlr = 0.05
         self.epochs = 1
         self.batch_size = 32
-        self.test_batch_size = 673
         self.num_layers = 40

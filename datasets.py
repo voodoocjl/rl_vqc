@@ -27,6 +27,9 @@ class CustomDataset(Dataset):
         target = self.target[index]
         return audio_val, visual_val, text_val, target
 
+def adjust(modal, position, rate):
+    modal[:, :, position] = modal[:, :, position] * rate
+    return modal
 
 def MOSIDataLoaders(args):
     with open('data/mosi', 'rb') as file:
@@ -49,20 +52,24 @@ def MOSIDataLoaders(args):
     test_visual = torch.from_numpy(test_data[VISUAL]).float()
     test_text = torch.from_numpy(test_data[TEXT]).float()
     test_target = torch.from_numpy(test_data[TARGET]).squeeze()
+
+    train_audio = adjust(train_audio, 0, 0.01)
+    val_audio = adjust(val_audio, 0, 0.01)
+    test_audio = adjust(test_audio, 0, 0.01)
     
     train = CustomDataset(train_audio, train_visual, train_text, train_target)
     val = CustomDataset(val_audio, val_visual, val_text, val_target)
     test = CustomDataset(test_audio, test_visual, test_text, test_target)
     train_loader = torch.utils.data.DataLoader(dataset=train, batch_size=args["batch_size"], shuffle=True, pin_memory=True)
-    val_loader = torch.utils.data.DataLoader(dataset=val, batch_size=args["batch_size"], shuffle=True, pin_memory=True)
-    test_loader = torch.utils.data.DataLoader(dataset=test, batch_size=args["test_batch_size"], shuffle=True, pin_memory=True)
+    val_loader = torch.utils.data.DataLoader(dataset=val,  batch_size = len(val), shuffle=True, pin_memory=True)
+    test_loader = torch.utils.data.DataLoader(dataset=test, batch_size=len(test), shuffle=True, pin_memory=True)
     return train_loader, val_loader, test_loader
 
 
 if __name__ == '__main__':
-    args = Arguments()
+    args = {"batch_size": 32, "test_batch_size":673}
     train_loader, val_loader, test_loader = MOSIDataLoaders(args)
-    for data_a, data_v, data_t, target in train_loader:
+    for data_a, data_v, data_t, target in val_loader:
         print(data_a.shape, data_v.shape, data_t.shape, target.shape)
         print(data_a.dtype, data_v.dtype, data_t.dtype, target.dtype)
         break

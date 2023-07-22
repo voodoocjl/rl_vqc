@@ -13,8 +13,8 @@ class QuantumLayer(torch.nn.Module):
         self.params = torch.nn.Parameter(torch.randn(self.args["num_layers"]))
     
     def forward(self, input):
-        q_out = torch.Tensor(0, self.args["num_qubits"])
-        # q_out = torch.Tensor(0)
+        # q_out = torch.Tensor(0, self.args["num_qubits"])
+        q_out = torch.Tensor(0)
 
         # q_out = q_out.to(self.args.device)
         for elem in input:
@@ -62,7 +62,7 @@ class QuantumLayer(torch.nn.Module):
                     else:
                         print("Wrong gate")            
             return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)]
-            # return qml.expval(qml.PauliZ(0))
+            # return qml.expval(qml.PauliZ(2) @ qml.PauliZ(3))
 
         return circuit()    
 
@@ -73,7 +73,7 @@ class QNet(torch.nn.Module):
         super(QNet, self).__init__()
         self.args = arguments
         self.design = design
-        self.ClassicalLayer_a = nn.LSTM(self.args["a_insize"], self.args["a_hidsize"])
+        self.ClassicalLayer_a = nn.RNN(self.args["a_insize"], self.args["a_hidsize"])
         self.ClassicalLayer_v = nn.RNN(self.args["v_insize"], self.args["v_hidsize"])        
         self.ClassicalLayer_t = nn.RNN(self.args["t_insize"], self.args["t_hidsize"])        
         self.QuantumLayer = QuantumLayer(self.args, self.design)
@@ -86,7 +86,7 @@ class QNet(torch.nn.Module):
         a_h = self.ClassicalLayer_a(x_a)[0][-1]
         v_h = self.ClassicalLayer_v(x_v)[0][-1]
         t_h = self.ClassicalLayer_t(x_t)[0][-1]
-        a_o = (a_h + 1)/2
+        a_o = (a_h + 1)/2  * pi 
         v_o = (v_h + 1)/2  * pi
         t_o = (t_h + 1)/2  * pi
         x_p = torch.cat((a_o, v_o, t_o), 1)

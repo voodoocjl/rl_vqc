@@ -2,4 +2,5 @@ __pycache__/
 
 data/mosi
 
-results/temp.pth
+results/
+agents/__pycache__/DeepQ.cpython-39.pyc
